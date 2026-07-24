@@ -44,7 +44,7 @@ The pre-existing ignored `integrations/pi/dist/` directory was preserved, and th
 
 - Exact passing source commit: `318fc77d62269fc1bf7b63370c6a8ed8f2e1aa03` on `master`.
 - Its preceding commit `99eec4e` is the user-authorized pure Prettier remediation for the user-owned Pi command-parsing change; it corrected pre-existing formatting drift without changing behavior.
-- All coordinated package, lock, marketplace, and plugin metadata is `0.2.0`; protocol compatibility values, including `core.version` and `spec/asyncapi.yaml`, remain `0.1.0`.
+- All coordinated package, lock, marketplace, and plugin metadata is `0.2.0`; protocol `core.version` remains `0.1`, and the `spec/asyncapi.yaml` document version remains `0.1.0`.
 - The complete Phase A gate ran against exact source commit `318fc77`; results are recorded below.
 - The worktree was clean after validation. No source tag exists.
 - `integrations/pi/dist/` was regenerated from the accepted source and retained; generated root artifact output and `integrations/pi/dist-tests/` were removed.
@@ -57,28 +57,30 @@ Approved direction: retain `0.1.0` as the unreleased historical baseline. The la
 - Sanitized fetch/push destination: SSH transport to `github.com/arcanemachine/inter-agent.git`.
 - Upstream: `master` tracks `origin/master`.
 - The local `origin/HEAD` symbolic default-branch ref is unresolved.
-- Local branches: `master` and `unstable`.
+- Local branches: `master`, `master--backup`, and `unstable`; re-inventory all refs at the final physical gate.
 - Local tags: none.
 - Submodules and `.gitmodules`: none.
 - `git-filter-repo`: available locally.
 
-### Stale branch
+### Recovery-only local branches
 
-`unstable` is 68 commits behind `master` and has three commits not in `master`. Its unique changes affect an obsolete active-plan packet and Pi extension work.
+`unstable` has three commits not in `master` and otherwise trails it. Its unique changes affect an obsolete active-plan packet and Pi extension work.
 
-Recommendation: preserve `unstable` in the full source backup, but do not propagate it into public child histories unless the user explicitly revives that work.
+`master--backup` has no unique commits and is fully contained in `master`.
+
+Recommendation: preserve both branches in the full all-refs source backup. Do not propagate either into public child histories unless the user explicitly revives `unstable`; recheck their relation to `master` immediately before creating the recovery set.
 
 ## Package inventory
 
 | Boundary | Current identity | Migration disposition |
 | --- | --- | --- |
-| Root Python distribution | `inter-agent` `0.1.0` | Rename clean core distribution to `inter-agent-core` |
-| Root Pi Git-install facade | `inter-agent-pi-package` `0.1.0`, private | Retire after Pi extraction |
-| Nested Pi package | `pi-inter-agent` `0.1.0` | Rename canonical child npm package to `inter-agent-pi` |
-| Claude marketplace | `inter-agent` `0.1.0` | Move to standalone Claude repository and rewrite source path |
-| Claude plugin | `inter-agent` `0.1.0` | Bump with coordinated source metadata to `0.2.0` |
-| Python lock | editable `inter-agent` `0.1.0` | Rebuild for core; generate independent child locks |
-| Pi lock | `pi-inter-agent` `0.1.0` | Move with Pi and update identity |
+| Root Python distribution | `inter-agent` `0.2.0` | Rename clean core distribution to `inter-agent-core` |
+| Root Pi Git-install facade | `inter-agent-pi-package` `0.2.0`, private | Retire after Pi extraction |
+| Nested Pi package | `pi-inter-agent` `0.2.0` | Rename canonical child npm package to `inter-agent-pi` |
+| Claude marketplace | `inter-agent` `0.2.0` | Move to standalone Claude repository and rewrite source path |
+| Claude plugin | `inter-agent` `0.2.0` | Move with coordinated source metadata into the standalone Claude repository |
+| Python lock | editable `inter-agent` `0.2.0` | Rebuild for core; generate independent child locks |
+| Pi lock | `pi-inter-agent` `0.2.0` | Move with Pi and update identity |
 
 No registry ownership or current name availability was inferred from local metadata.
 
@@ -263,22 +265,22 @@ Accepted extracted repositories are retained. Filtering clones and recovery mate
 
 ### Preconditions
 
-1. Obtain separate authorization for Phase A and begin the maintenance window with repository-editing agents stopped.
-2. Apply the coordinated `0.2.0` metadata change and run the complete monorepo, Pi, and Claude gates.
-3. Confirm a clean current worktree.
-4. Record the exact accepted commit and version.
-5. Obtain approval for the freeze ref name and physical migration.
+1. Phase A is complete with coordinated `0.2.0` metadata and the full documented gate.
+2. Present the exact accepted current `master` commit and reviewed operations for the separate final physical go/no-go.
+3. Begin the maintenance window and confirm all repository writers are stopped.
+4. Reconfirm a clean worktree, unchanged accepted commit, branch inventory, and absence of the proposed tag.
+5. Obtain explicit approval for local tag creation, recovery-set creation, reviewed GitHub operations, and physical migration.
 
 ### Source recovery set
 
-In a temporary, namespaced migration workspace outside every repository checkout, retained through migration acceptance:
+After the final physical go/no-go, use a temporary namespaced migration workspace outside every repository checkout, retained through migration acceptance:
 
-1. Create a full local Git bundle containing all refs, including `unstable`.
-2. Verify the bundle with `git bundle verify` and record its SHA-256 digest privately.
-3. Create a local mirror clone from the main checkout without contacting a remote.
-4. Run `git fsck --full` against the mirror.
-5. After authorization, create the approved annotated freeze tag/ref at the tested commit.
-6. Record the source commit, ref, bundle digest, branch inventory, and verification results in maintainer migration notes.
+1. Create the approved annotated freeze tag at the exact accepted current `master` commit without pushing it.
+2. Create a full local Git bundle containing all refs, including the freeze tag, `master--backup`, and `unstable`.
+3. Verify the bundle with `git bundle verify` and record its SHA-256 digest privately.
+4. Create a local mirror clone from the main checkout without contacting a remote.
+5. Run `git fsck --full` and verify the expected branches and freeze tag in the mirror.
+6. Record the source commit, tag, bundle digest, branch inventory, and verification results in maintainer migration notes.
 
 The bundle is the portable immutable recovery artifact during migration. The mirror is the convenient source for repeatable local clones. Neither is intended to remain permanently under `/workspace/tmp/`; retain them until the archived monorepo and accepted target repositories provide verified durable recovery, then remove them only with user confirmation.
 
@@ -363,7 +365,7 @@ Change only coordinated release metadata:
 - `integrations/claude-code/.claude-plugin/plugin.json`: `version` → `0.2.0`;
 - `CHANGELOG.md`: add a `0.2.0` split-generation entry while retaining `0.1.0` as the unreleased historical baseline.
 
-Do not change protocol `core.version` or `spec/asyncapi.yaml` version `0.1.0`; those are protocol compatibility values, not distribution versions. Do not change dependencies or contact registries.
+Do not change protocol `core.version` `0.1` or the `spec/asyncapi.yaml` document version `0.1.0`; neither is a distribution version. Do not change dependencies or contact registries.
 
 After the edit:
 
@@ -408,12 +410,12 @@ No earlier planning approval substitutes for this gate.
 
 After the go/no-go:
 
-1. Reconfirm that the maintenance window remains active and no executor or other session has written since the passing Phase A commit.
+1. Reconfirm that the maintenance window remains active and no executor or other session has written since the accepted current `master` commit.
 2. Create the approved local annotated source tag without pushing it.
 3. Create and verify an all-refs bundle under `/workspace/tmp/inter-agent-migration/`.
 4. Record its SHA-256 digest in this maintainer migration record.
 5. Create a local mirror from the checkout without contacting the remote.
-6. Run `git fsck --full` and verify the mirror contains `master`, `unstable`, and the approved freeze tag.
+6. Run `git fsck --full` and verify the mirror contains `master`, `master--backup`, `unstable`, and the approved freeze tag.
 7. Create no child filtering clone until its roadmap item becomes active.
 
 The bundle and mirror remain transitional recovery material through the extraction program. They are removed only after verified durable repositories exist and the user explicitly confirms cleanup.
