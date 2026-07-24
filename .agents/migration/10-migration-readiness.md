@@ -264,12 +264,11 @@ Accepted extracted repositories are retained. Filtering clones and recovery mate
 
 ### Preconditions
 
-1. Complete the separately authorized coordinated `0.2.0` metadata change and full validation.
-2. Stop repository-editing agents for the maintenance window.
+1. Obtain separate authorization for Phase A and begin the maintenance window with repository-editing agents stopped.
+2. Apply the coordinated `0.2.0` metadata change and run the complete monorepo, Pi, and Claude gates.
 3. Confirm a clean current worktree.
-4. Run the complete monorepo, Pi, and Claude gates against the intended final `HEAD`.
-5. Record the exact accepted commit and version.
-6. Obtain approval for the freeze ref name and physical migration.
+4. Record the exact accepted commit and version.
+5. Obtain approval for the freeze ref name and physical migration.
 
 ### Source recovery set
 
@@ -406,7 +405,7 @@ No earlier planning approval substitutes for this gate.
 
 After the go/no-go:
 
-1. Begin the maintenance window and confirm no executor or other session is writing to the monorepo.
+1. Reconfirm that the maintenance window remains active and no executor or other session has written since the passing Phase A commit.
 2. Create the approved local annotated source tag without pushing it.
 3. Create and verify an all-refs bundle under `/workspace/tmp/inter-agent-migration/`.
 4. Record its SHA-256 digest in this maintainer migration record.
