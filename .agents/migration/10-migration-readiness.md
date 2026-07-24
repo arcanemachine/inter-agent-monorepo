@@ -86,11 +86,11 @@ No registry ownership or current name availability was inferred from local metad
 
 ## Complete current-path ownership manifest
 
-All 234 tracked paths were classified. Counts describe their primary current-source disposition before shared documents are rewritten or copied deliberately.
+All 235 tracked paths are classified. Counts describe their primary current-source disposition before shared documents are rewritten or copied deliberately.
 
 | Disposition | Count |
 | --- | ---: |
-| Private meta | 66 |
+| Private meta | 67 |
 | Deferred host planning in private meta | 2 |
 | Core | 109 |
 | Pi | 20 |
