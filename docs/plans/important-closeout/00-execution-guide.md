@@ -19,7 +19,7 @@ Complete and release the existing inter-agent product before any OpenCode or Cod
 - Use `inter-agent-pi` for the Pi repository, npm package, and extension-owned Python helper distribution.
 - Use `inter-agent-claude-code` for the Claude repository and extension-owned Python helper distribution.
 - Move host Python adapters out of the core namespace into `inter_agent_pi` and `inter_agent_claude`; preserve the user-facing commands `inter-agent-pi` and `inter-agent-claude`.
-- Use independent child-package versions after an initially coordinated `0.1.0` release.
+- Use coordinated `0.2.0` source metadata for the split generation, then version child packages independently; the monorepo's `0.1.0` baseline remains unreleased.
 - Keep private workflow material in `inter-agent-meta`; public repositories own only stable public documentation and any intentionally public contributor guidance.
 - Defer OpenCode and Codex. OpenCode becomes the first promoted product direction only after released-artifact acceptance; Codex remains after OpenCode.
 

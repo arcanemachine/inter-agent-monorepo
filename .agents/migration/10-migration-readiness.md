@@ -47,9 +47,9 @@ The pre-existing ignored `integrations/pi/dist/` directory was preserved, and th
 - The user identified that commit as an unrelated small tweak and asked that its content not be inspected during the baseline audit.
 - Current `master` matched `origin/master` when inventoried.
 - Current `HEAD` has not passed the complete gate recorded above.
-- The current Claude plugin manifest has no version, while `tests/test_versioning_docs.py` requires its version to match `0.1.0`. The final freeze cannot use current `HEAD` until the intended version policy and test agree and the complete gate passes.
+- The Claude plugin manifest already has the coordinated `0.1.0` version; an earlier planning note incorrectly reported it missing.
 
-Approved direction: use the latest accepted `HEAD`, not its parent, as the eventual freeze source after the final gate passes. The exact prerelease version and tag mapping remains to be confirmed.
+Approved direction: leave `0.1.0` as the unreleased historical baseline, bump coordinated source metadata to `0.2.0`, and use the latest accepted `HEAD` as the freeze source after the final gate passes.
 
 ## Repository inventory
 
@@ -76,7 +76,7 @@ Recommendation: preserve `unstable` in the full source backup, but do not propag
 | Root Pi Git-install facade | `inter-agent-pi-package` `0.1.0`, private | Retire after Pi extraction |
 | Nested Pi package | `pi-inter-agent` `0.1.0` | Rename canonical child npm package to `inter-agent-pi` |
 | Claude marketplace | `inter-agent` `0.1.0` | Move to standalone Claude repository and rewrite source path |
-| Claude plugin | `inter-agent`, currently without a version | Resolve coordinated-version policy before freeze |
+| Claude plugin | `inter-agent` `0.1.0` | Bump with coordinated source metadata to `0.2.0` |
 | Python lock | editable `inter-agent` `0.1.0` | Rebuild for core; generate independent child locks |
 | Pi lock | `pi-inter-agent` `0.1.0` | Move with Pi and update identity |
 
@@ -319,9 +319,9 @@ Never run history filtering in the main checkout or the only recovery copy.
 | D5 | Current public remote | Preserve/archive the monorepo until all children and the ecosystem pass; do not rewrite it in place | Approved |
 | D6 | New-repository default branch | Use `main`; retain source `master` only in the archived source history | Approved |
 | D7 | Visibility | Private meta; public ecosystem and children, as already locked | Approved |
-| D8 | Initial versions | Coordinate initial `0.1.0`, then version children independently | Approved |
-| D9 | Freeze source | Latest accepted `HEAD` after the final full gate | Approved; exact prerelease mapping pending |
-| D10 | Freeze ref and version | Use explicit `0.1.0-alpha1` / `0.1.0-alpha2` identities as directed by the user | Exact commit and manifest/tag mapping required |
+| D8 | Coordinated version | Keep `0.1.0` as an unreleased historical baseline; bump migration source and initial split generation to `0.2.0`, then version children independently | Approved |
+| D9 | Freeze source | Latest accepted `HEAD` after the final full gate | Approved |
+| D10 | Freeze ref and version | Use coordinated source version `0.2.0` and annotated freeze tag `pre-split-0.2.0` | Approved |
 | D11 | Registry names and checks | Use locked names; user controls suitable PyPI/npm accounts and will handle availability/publication later; no agent registry contact | Approved and deferred |
 | D12 | Physical migration | Begin only after all preceding gates and maintenance-window confirmation | Not authorized |
 | D13 | GitHub owner and target repositories | Use `arcanemachine/inter-agent-meta`, `arcanemachine/inter-agent`, `arcanemachine/inter-agent-core`, `arcanemachine/inter-agent-pi`, and `arcanemachine/inter-agent-claude-code` | Approved |
@@ -337,24 +337,18 @@ Never run history filtering in the main checkout or the only recovery copy.
 Before repository/ref creation, remote changes, registry contact, history filtering, directory moves, or publication, resolve and record:
 
 - authorization for leader-performed GitHub rename/create operations;
-- current plugin-version policy and freeze blocker;
-- exact `0.1.0-alpha1` / `0.1.0-alpha2` commit, manifest, and tag mapping;
+- authorization for the coordinated `0.2.0` metadata change;
 - maintenance-window timing;
-- final freeze version/ref;
+- exact final passing commit for `pre-split-0.2.0`;
 - authorization for physical migration.
 
-## Proposed prerelease mapping
+## Approved version direction
 
-Planning proposal only; not yet approved:
-
-1. Treat tested commit `2ae2a72ee375514914c7c5cdbddf311a40fcd363` as historical prerelease `0.1.0-alpha1`.
-2. Update the final monorepo metadata consistently for `0.1.0-alpha2`, using the Python-normalized form where packaging requires it.
-3. Restore the Claude plugin version using the approved alpha-2 identity so coordinated metadata and validation agree.
-4. After the complete gate passes, treat that exact final commit as `0.1.0-alpha2`.
-5. Create annotated `0.1.0-alpha1` and `0.1.0-alpha2` tags only after the final physical go/no-go.
-6. Let extracted children progress from alpha-2 source toward their first stable `0.1.0` releases.
-
-The user must confirm whether alpha identities apply to both package manifests and Git tags, or to Git tags only.
+1. Keep `0.1.0` as the unreleased historical and tested baseline; it does not need a release or source tag.
+2. Bump all coordinated monorepo package, plugin, marketplace, lock, test, and changelog metadata to `0.2.0` in one source-change step.
+3. Run the complete gate against the resulting current `HEAD`.
+4. After the physical go/no-go, create annotated freeze tag `pre-split-0.2.0` at that exact passing commit.
+5. Begin the split repository generation at coordinated `0.2.0`; child versions become independent afterward.
 
 ## Planned execution runbook
 
@@ -362,8 +356,8 @@ Status: planning only; none of these actions is currently authorized
 
 ### Phase A — resolve and validate the final source
 
-1. Confirm the prerelease mapping above.
-2. Make only the approved coordinated version-policy correction.
+1. Obtain separate authorization for the coordinated `0.2.0` metadata change.
+2. Make only that approved coordinated version update.
 3. Run the focused version/plugin checks.
 4. Run the complete monorepo, Pi, and Claude gates against the resulting current `HEAD`.
 5. Confirm a clean worktree and record the exact passing commit.
@@ -380,11 +374,11 @@ No earlier planning approval substitutes for this gate.
 After the go/no-go:
 
 1. Begin the maintenance window and confirm no executor or other session is writing to the monorepo.
-2. Create the approved local annotated source tags without pushing them.
+2. Create the approved local annotated source tag without pushing it.
 3. Create and verify an all-refs bundle under `/workspace/tmp/inter-agent-migration/`.
 4. Record its SHA-256 digest in this maintainer migration record.
 5. Create a local mirror from the checkout without contacting the remote.
-6. Run `git fsck --full` and verify the mirror contains `master`, `unstable`, and both approved source tags.
+6. Run `git fsck --full` and verify the mirror contains `master`, `unstable`, and the approved freeze tag.
 7. Create no child filtering clone until its roadmap item becomes active.
 
 The bundle and mirror remain transitional recovery material through the extraction program. They are removed only after verified durable repositories exist and the user explicitly confirms cleanup.
@@ -399,7 +393,7 @@ After separate credential-use authorization:
 4. Create public `arcanemachine/inter-agent` as the clean ecosystem placeholder without importing monorepo history.
 5. Do not create child repositories early; each child repository is created with its extraction item.
 6. Update the source checkout's `origin` to the approved archive URL only after the rename is verified.
-7. The user performs every push, including source tags and initial meta/ecosystem branches.
+7. The user performs every push, including the source tag and initial meta/ecosystem branches.
 8. The leader verifies repository names and visibility without exposing credentials.
 
 ### Phase E — private meta scaffold
@@ -426,8 +420,7 @@ Using an isolated filtering clone from the verified local mirror:
 
 ## Immediate next steps
 
-1. Confirm or revise the proposed prerelease mapping.
-2. Resolve the remaining maintenance-window and final-ref decisions.
-3. Update and commit this record with approved values.
-4. Prepare the exact final-source metadata change for separate authorization.
-5. Stop at the final physical go/no-go before any tag, credentialed action, remote operation, filtering, or push.
+1. Commit this approved planning update.
+2. Prepare the exact coordinated `0.2.0` source metadata change for separate authorization.
+3. Resolve the maintenance-window timing and exact final passing commit.
+4. Stop at the final physical go/no-go before any tag, credentialed action, remote operation, filtering, or push.

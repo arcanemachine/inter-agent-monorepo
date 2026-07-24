@@ -19,7 +19,7 @@ Each upload/tag/marketplace action receives its own explicit authorization. One 
 
 ## Version policy
 
-- Initial coordinated target is `0.1.0` if available and still appropriate.
+- Initial coordinated split-generation target is `0.2.0`; the monorepo's `0.1.0` baseline remains unreleased.
 - Child versions become independent after initial release.
 - Each helper declares a tested core version range; do not use an unbounded dependency.
 - npm package, Pi repo tag, Pi helper, Claude repo tag/plugin metadata, and Claude helper versions are documented explicitly; they need not remain equal forever.

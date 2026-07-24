@@ -61,7 +61,7 @@ They must not duplicate child build logic, rewrite child files, install silently
 
 `COMPATIBILITY.md` records semantic package/plugin versions and protocol compatibility, not raw submodule hashes copied from Git. Before releases exist it may identify candidate versions and state that Git pins the exact tested source internally.
 
-Each child versions independently after initial coordinated `0.1.0`. Updating a submodule requires running the cross-repository gate and updating compatibility notes when the supported version set changes.
+Each child versions independently after the coordinated `0.2.0` split generation. Updating a submodule requires running the cross-repository gate and updating compatibility notes when the supported version set changes.
 
 ## Pre-publication dependency strategy
 

@@ -28,7 +28,7 @@ Core excludes:
 
 - Repository and distribution: `inter-agent-core`.
 - Import namespace: `inter_agent`.
-- Version starts at the accepted initial release version, expected `0.1.0` unless release audit changes it.
+- Version starts at the accepted split-generation version `0.2.0` unless the release audit changes it; the monorepo's `0.1.0` baseline remains unreleased.
 - Preserve generic console scripts:
   - `inter-agent-server`
   - `inter-agent-connect`
