@@ -465,9 +465,7 @@ test("delivery command accepts any leading i/q string for the mode", async () =>
           .slice()
           .reverse()
           .find((n) =>
-            n.message.includes(
-              "future arrivals will be delivered immediately",
-            ),
+            n.message.includes("future arrivals will be delivered immediately"),
           );
         assert.ok(immediateNotify, `alias ${arg} did not switch to immediate`);
       }
