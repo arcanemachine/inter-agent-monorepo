@@ -49,7 +49,7 @@ The pre-existing ignored `integrations/pi/dist/` directory was preserved, and th
 - The worktree was clean after validation. No source tag exists.
 - `integrations/pi/dist/` was regenerated from the accepted source and retained; generated root artifact output and `integrations/pi/dist-tests/` were removed.
 
-Approved direction: retain `0.1.0` as the unreleased historical baseline and use `318fc77` as the source candidate for the later `pre-split-0.2.0` tag, only after the separate physical go/no-go.
+Approved direction: retain `0.1.0` as the unreleased historical baseline. The later `pre-split-0.2.0` tag targets the exact accepted current `master` commit containing Phase A source commit `318fc77` and this durable closeout, only after the separate physical go/no-go.
 
 ## Repository inventory
 
@@ -337,7 +337,7 @@ Before repository/ref creation, remote changes, registry contact, history filter
 
 - authorization for leader-performed GitHub rename/create operations;
 - maintenance-window timing and stopped repository writers;
-- confirmation of source commit `318fc77d62269fc1bf7b63370c6a8ed8f2e1aa03` and proposed local `pre-split-0.2.0` tag;
+- confirmation of the exact accepted current `master` commit containing Phase A source commit `318fc77d62269fc1bf7b63370c6a8ed8f2e1aa03` and its durable closeout, plus the proposed local `pre-split-0.2.0` tag;
 - authorization for physical migration.
 
 ## Approved version direction
@@ -456,5 +456,5 @@ Using an isolated filtering clone from the verified local mirror:
 ## Immediate next steps
 
 1. Resolve the maintenance-window timing and stop repository writers.
-2. Present source commit `318fc77`, the proposed local `pre-split-0.2.0` tag, recovery commands, workspace inventory, writer-lock status, and approved GitHub operations for one final physical go/no-go.
+2. Present the exact accepted current `master` commit containing Phase A source commit `318fc77` and this durable closeout, the proposed local `pre-split-0.2.0` tag, recovery commands, workspace inventory, writer-lock status, and approved GitHub operations for one final physical go/no-go.
 3. Stop before any tag, credentialed action, remote operation, filtering, or push unless that gate is explicitly granted.

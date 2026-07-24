@@ -96,7 +96,7 @@ Phase 3 (implemented) adds subscribe, unsubscribe, publish, channel diagnostics,
 
 Phase 4 (implemented) provides user-invoked subscribe, unsubscribe, publish, and read-only channel diagnostics through both installed Pi and Claude Code integrations, plus channel-aware notifications/context. These operations are intentionally not LLM-callable; there are no automatic subscriptions, publications, or diagnostics. Short-lived publishers use the active listener routing name, and each adapter listener suppresses its own routing name's channel delivery so publisher exclusion remains consistent at the installed UX boundary. Cross-adapter live acceptance proves Pi and Claude publication, subscription, diagnostics, and delivery interoperate on one server.
 
-Next activation step: obtain a separate final physical go/no-go for item 10. It must review source commit `318fc77`, the proposed local `pre-split-0.2.0` tag, recovery commands and workspace inventory, writer-lock status, and approved GitHub operations. Do not create repositories or refs, use credentials, contact registries, publish, change remotes, rewrite history, move files, or begin extraction before that gate.
+Next activation step: obtain a separate final physical go/no-go for item 10. It must review the exact accepted current `master` commit containing Phase A source commit `318fc77` and its durable closeout, the proposed local `pre-split-0.2.0` tag, recovery commands and workspace inventory, writer-lock status, and approved GitHub operations. Do not create repositories or refs, use credentials, contact registries, publish, change remotes, rewrite history, move files, or begin extraction before that gate.
 
 Reference material:
 
