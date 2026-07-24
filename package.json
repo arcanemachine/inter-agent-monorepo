@@ -1,6 +1,6 @@
 {
   "name": "inter-agent-pi-package",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Pi package entry point for the inter-agent message bus extension",
   "type": "module",
   "private": true,

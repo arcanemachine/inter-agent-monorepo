@@ -13,6 +13,11 @@ The Python package version in `pyproject.toml` is the source of truth for core r
 
 The protocol capability `core.version` is a protocol compatibility value, not the package release version.
 
+## 0.2.0
+
+- Coordinated source metadata for the repository split generation. This is the unreleased baseline used to extract the core, Pi, and Claude Code repositories into independent packages; child packages version independently afterward.
+- No protocol behavior changes; the protocol capability `core.version` remains a separate compatibility value.
+
 ## 0.1.0
 
 - Initial package version for the inter-agent localhost message bus, core protocol helpers, and supported host integrations.
