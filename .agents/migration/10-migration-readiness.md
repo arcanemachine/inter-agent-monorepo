@@ -345,10 +345,42 @@ Before repository/ref creation, remote changes, registry contact, history filter
 ## Approved version direction
 
 1. Keep `0.1.0` as the unreleased historical and tested baseline; it does not need a release or source tag.
-2. Bump all coordinated monorepo package, plugin, marketplace, lock, test, and changelog metadata to `0.2.0` in one source-change step.
+2. Bump all coordinated monorepo package, plugin, marketplace, lock, and changelog metadata to `0.2.0` in one source-change step.
 3. Run the complete gate against the resulting current `HEAD`.
 4. After the physical go/no-go, create annotated freeze tag `pre-split-0.2.0` at that exact passing commit.
 5. Begin the split repository generation at coordinated `0.2.0`; child versions become independent afterward.
+
+## Phase A exact change specification
+
+Status: ready for separate source-change authorization; not yet authorized
+
+Change only coordinated release metadata:
+
+- `pyproject.toml`: `[project].version` → `0.2.0`;
+- `uv.lock`: editable `inter-agent` package version → generated `0.2.0` value;
+- root `package.json`: `version` → `0.2.0`;
+- `integrations/pi/package.json`: `version` → `0.2.0`;
+- `integrations/pi/package-lock.json`: only the two root-package version fields → `0.2.0`;
+- `.claude-plugin/marketplace.json`: marketplace and contained plugin versions → `0.2.0`;
+- `integrations/claude-code/.claude-plugin/plugin.json`: `version` → `0.2.0`;
+- `CHANGELOG.md`: add a `0.2.0` split-generation entry while retaining `0.1.0` as the unreleased historical baseline.
+
+Do not change protocol `core.version` or `spec/asyncapi.yaml` version `0.1.0`; those are protocol compatibility values, not distribution versions. Do not change dependencies or contact registries.
+
+After the edit:
+
+1. regenerate only the Python lock metadata with `UV_OFFLINE=1 uv lock`;
+2. run the focused version-documentation test;
+3. run `UV_OFFLINE=1 ./run-checks.sh`;
+4. run Pi tests, typecheck, build, and Prettier check;
+5. run strict root marketplace and Claude plugin validation;
+6. build Python wheel/sdist offline and validate their version/content;
+7. run Pi package dry-run inspection;
+8. run `git diff --check` and confirm only the approved metadata files changed;
+9. remove generated build outputs;
+10. commit the passing metadata change as `chore: bump version to 0.2.0`.
+
+No tag, remote, credential, registry, repository, history-filtering, or push action belongs to Phase A.
 
 ## Planned execution runbook
 
