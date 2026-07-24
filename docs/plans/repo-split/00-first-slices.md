@@ -74,7 +74,7 @@ After that gate, Pi is the first product extraction because its TypeScript packa
 
 ## History and safety
 
-- Perform path filtering in throwaway clones using a reviewed mapping manifest.
+- Perform path filtering in isolated temporary clones using a reviewed mapping manifest.
 - Preserve relevant history for files moving into each child.
 - Keep a recoverable freeze ref/backup.
 - Stop all editing agents during physical migration.

@@ -26,31 +26,20 @@ Verified facts, the ownership manifest, recovery design, recommendations, and pe
 
 #### Leader-owned migration-readiness analysis
 
-The leader performs this decision and synthesis work directly rather than delegating it:
+The leader completed and durably recorded:
 
-1. Verify the current repository state and run the full monorepo, Pi, and Claude validation gates.
-2. Identify the candidate tested source commit/version and inventory current package, repository, and remote facts without exposing credentials.
-3. Produce the complete path and history-ownership mapping for private meta material, core, Pi, Claude Code, and ecosystem-level files and tests.
-4. Design the recoverable backup/ref and throwaway-clone strategy.
-5. Identify conflicts and unresolved decisions, then give the user concrete recommendations.
+1. the tested source baseline and full monorepo, Pi, and Claude validation results;
+2. current package, repository, branch, and safe remote facts;
+3. the complete path and history-ownership mapping for private meta, core, Pi, Claude Code, and ecosystem material;
+4. the recoverable backup/ref and isolated-filtering strategy;
+5. the accepted recommendations, operating responsibilities, and remaining authorization gates;
+6. the exact Phase A coordinated `0.2.0` metadata-change boundary and validation procedure.
 
-#### User decision and authorization gate
+#### Current execution boundary
 
-Before any external, credentialed, destructive, or physical migration action, the leader presents recommendations and obtains explicit user decisions for:
+Phase A is ready but not authorized. It changes only the coordinated package/plugin/marketplace/lock/changelog version metadata to `0.2.0`, runs the documented focused/package/full gates, cleans generated outputs, and commits the passing metadata change. It does not create a tag or perform migration work.
 
-- Git hosting owner/organization and exact intended repository URLs;
-- private/public visibility;
-- authorization to create repositories and push;
-- default branches and branch-protection expectations;
-- package-registry ownership and namespaces;
-- disposition of the current public remote;
-- maintenance-window timing;
-- final freeze ref, tag, or version;
-- authorization to begin physical migration.
-
-#### Mechanical execution after approval
-
-Only after those decisions are locked may the leader prepare a bounded executor packet for concrete mechanical work such as creating the approved recoverable workspace, applying the approved mapping in throwaway clones, or scaffolding the approved private meta repository. Credentialed actions remain with the user when the container lacks authorized access. Pi extraction remains roadmap item 11 and must not begin during item 10.
+Item 10 remains leader-owned. After later explicit physical authorization, the leader performs its recovery, GitHub-topology, and private-meta checkpoint work directly. Executor packets begin with substantive extraction work at roadmap item 11, not with item 10 decision or checkpoint work. The user performs every push.
 
 #### Completion standard
 
@@ -58,7 +47,7 @@ The leader verifies the tested freeze state, recovery path, approved repository 
 
 #### Current authorization boundary
 
-Local leader analysis and non-secret durable planning documentation are authorized. No executor dispatch, repository or ref creation, credential use, registry contact, remote change, history rewrite, file move, publication, or extraction is currently authorized.
+Local leader analysis and non-secret durable planning documentation are authorized and complete. Phase A source changes are not authorized. No executor dispatch, package metadata change, repository or ref creation, credential use, registry contact, remote change, history rewrite, file move, publication, or extraction is currently authorized.
 
 Detailed accepted requirements remain in [`../docs/plans/important-closeout/04-migration-checkpoint-and-meta.md`](../docs/plans/important-closeout/04-migration-checkpoint-and-meta.md). Continuity is tracked in [`../ROADMAP.md`](../ROADMAP.md#closeout-execution-queue).
 

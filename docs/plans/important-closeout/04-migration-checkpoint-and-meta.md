@@ -1,6 +1,6 @@
 # Migration checkpoint and private meta repository
 
-Status: concrete; user-gated physical migration; queued after mailbox and TLS acceptance
+Status: active leader-owned checkpoint; physical migration remains user-gated
 
 ## Goal
 
@@ -56,7 +56,7 @@ Public repositories own stable product README/architecture/security/changelog/li
 
 ## History extraction strategy
 
-Prefer path-filtered history preservation with `git filter-repo` (or an equivalently reviewed tool), performed in throwaway clones:
+Prefer path-filtered history preservation with `git filter-repo` (or an equivalently reviewed tool), performed in isolated temporary filtering clones:
 
 - Pi extraction includes `integrations/pi/**`, `src/inter_agent/adapters/pi/**`, Pi tests, Pi docs, and shared files intentionally copied/rebuilt at the child root.
 - Claude extraction includes `integrations/claude-code/**`, `src/inter_agent/adapters/claude/**`, Claude tests, and intentional shared docs/license.

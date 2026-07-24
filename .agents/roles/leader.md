@@ -31,7 +31,7 @@ Use this loop for every active item and after every handoff. Do not rely on chat
 
 ### Prepare and dispatch one item
 
-1. Before writing a packet for a large item, divide the item into dependency-ordered, independently reviewable slices. Prefer several shallow packets with narrow read sets, modification boundaries, and acceptance checks over fewer deep packets that require broad executor context. Prepare only the first dependency-ready slice; plan later packets just in time from accepted findings.
+1. Before writing a packet for a large delegable item, divide it only at coherent execution or verification boundaries. Each packet must remain substantive and independently reviewable while bounding the executor's context; avoid both broad context-heavy packets and ceremonial microtasks, and keep analysis, synthesis, risk assessment, and product decisions with the leader. Prepare only the first dependency-ready slice and plan later packets just in time from accepted findings.
 2. Prepare one bounded, self-contained packet for the current slice. It must independently provide the goal, allowed read and modify files, non-goals, exact requirements, acceptance criteria, focused checks, the full repository gate when applicable, and a runnable end-to-end acceptance test. Begin it with `Status: ready for dispatch` and `Assigned executor: none`.
 3. Update `.agents/PLAN.md` with only that current slice. Keep future sequence and status in `ROADMAP.md`; do not copy the queue into the active plan or prewrite packets for later slices.
 4. Commit the reviewed plan and packet before dispatch.

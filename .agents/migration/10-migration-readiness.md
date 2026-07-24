@@ -1,6 +1,6 @@
 # Item 10 migration-readiness record
 
-Status: leader analysis in progress; physical migration not authorized
+Status: leader analysis and planning complete; Phase A ready but not authorized; physical migration not authorized
 
 ## Purpose
 
@@ -40,13 +40,14 @@ Observed gates:
 
 The pre-existing ignored `integrations/pi/dist/` directory was preserved, and the generated `integrations/pi/dist-tests/` directory was removed.
 
-### Current source state
+### Current source state before Phase A
 
-- Current observed `HEAD`: `0caf5614b35d6097b753acb0481eaa8da12ef709`.
-- Current `HEAD` is one commit after the tested candidate.
-- The user identified that commit as an unrelated small tweak and asked that its content not be inspected during the baseline audit.
-- Current `master` matched `origin/master` when inventoried.
-- Current `HEAD` has not passed the complete gate recorded above.
+- The last fully validated source commit remains `2ae2a72ee375514914c7c5cdbddf311a40fcd363`.
+- Later commits contain the user-owned Pi command-parsing tweak and item 10 planning/documentation; they have not received the complete source gate.
+- The worktree was clean at the focused Phase A readiness check.
+- All coordinated package, lock, marketplace, and plugin metadata remains `0.1.0`.
+- No source tag exists.
+- The exact current tip will be captured after the authorized Phase A change and full gate; planning-only commits are not freeze candidates.
 - The Claude plugin manifest already has the coordinated `0.1.0` version; an earlier planning note incorrectly reported it missing.
 
 Approved direction: leave `0.1.0` as the unreleased historical baseline, bump coordinated source metadata to `0.2.0`, and use the latest accepted `HEAD` as the freeze source after the final gate passes.
@@ -257,13 +258,13 @@ Any useful ecosystem orchestration or public contributor guidance is written afr
 
 ### Terminology
 
-A **disposable filtering clone** is an isolated local clone used only for `git filter-repo` and mapping experiments. It is disposable because it can be regenerated from the verified source backup—not because its results are accepted without review.
+An **isolated filtering clone** is a temporary local clone used only for `git filter-repo` and mapping experiments. It can be regenerated from the verified source backup; its results still require full review.
 
 Accepted extracted repositories are retained. Filtering clones and recovery material are not deleted until the user confirms the migration is complete and recoverable.
 
 ### Preconditions
 
-1. Resolve the current plugin-version/test inconsistency.
+1. Complete the separately authorized coordinated `0.2.0` metadata change and full validation.
 2. Stop repository-editing agents for the maintenance window.
 3. Confirm a clean current worktree.
 4. Run the complete monorepo, Pi, and Claude gates against the intended final `HEAD`.
@@ -279,7 +280,7 @@ In a temporary, namespaced migration workspace outside every repository checkout
 3. Create a local mirror clone from the main checkout without contacting a remote.
 4. Run `git fsck --full` against the mirror.
 5. After authorization, create the approved annotated freeze tag/ref at the tested commit.
-6. Record the source commit, ref, bundle digest, branch inventory, and verification results in private migration notes.
+6. Record the source commit, ref, bundle digest, branch inventory, and verification results in maintainer migration notes.
 
 The bundle is the portable immutable recovery artifact during migration. The mirror is the convenient source for repeatable local clones. Neither is intended to remain permanently under `/workspace/tmp/`; retain them until the archived monorepo and accepted target repositories provide verified durable recovery, then remove them only with user confirmation.
 
@@ -452,7 +453,7 @@ Using an isolated filtering clone from the verified local mirror:
 
 ## Immediate next steps
 
-1. Commit this approved planning update.
-2. Prepare the exact coordinated `0.2.0` source metadata change for separate authorization.
-3. Resolve the maintenance-window timing and exact final passing commit.
+1. Obtain explicit user authorization for Phase A.
+2. Only after authorization, apply the exact coordinated `0.2.0` metadata change and run its documented validation.
+3. Record the exact passing Phase A commit and resolve the maintenance-window timing.
 4. Stop at the final physical go/no-go before any tag, credentialed action, remote operation, filtering, or push.
