@@ -37,9 +37,9 @@ The leader completed and durably recorded:
 
 #### Current execution boundary
 
-Phase A is ready but not authorized. It changes only the coordinated package/plugin/marketplace/lock/changelog version metadata to `0.2.0`, runs the documented focused/package/full gates, cleans generated outputs, and commits the passing metadata change. It does not create a tag or perform migration work.
+Phase A is complete at source commit `318fc77d62269fc1bf7b63370c6a8ed8f2e1aa03`: coordinated package/plugin/marketplace/lock/changelog metadata is `0.2.0`, and the documented focused/package/full gates passed. The preceding user-authorized formatting commit `99eec4e` corrected pre-existing Pi Prettier drift; it is part of the accepted source state. Phase A created no tag and performed no migration work.
 
-Item 10 remains leader-owned. After later explicit physical authorization, the leader performs its recovery, GitHub-topology, and private-meta checkpoint work directly. Executor packets begin with substantive extraction work at roadmap item 11, not with item 10 decision or checkpoint work. The user performs every push.
+Item 10 remains leader-owned. The next step is the separate Phase B final physical go/no-go. Only after later explicit physical authorization does the leader perform its recovery, GitHub-topology, and private-meta checkpoint work directly. Executor packets begin with substantive extraction work at roadmap item 11, not with item 10 decision or checkpoint work. The user performs every push.
 
 #### Completion standard
 
@@ -47,7 +47,7 @@ The leader verifies the tested freeze state, recovery path, approved repository 
 
 #### Current authorization boundary
 
-Local leader analysis and non-secret durable planning documentation are authorized and complete. Phase A source changes are not authorized. No executor dispatch, package metadata change, repository or ref creation, credential use, registry contact, remote change, history rewrite, file move, publication, or extraction is currently authorized.
+Local leader analysis, non-secret durable planning documentation, and Phase A are complete. No executor dispatch, repository or ref creation, credential use, registry contact, remote change, history rewrite, file move, publication, or extraction is currently authorized. Phase B requires a separate final physical go/no-go.
 
 Detailed accepted requirements remain in [`../docs/plans/important-closeout/04-migration-checkpoint-and-meta.md`](../docs/plans/important-closeout/04-migration-checkpoint-and-meta.md). Continuity is tracked in [`../ROADMAP.md`](../ROADMAP.md#closeout-execution-queue).
 

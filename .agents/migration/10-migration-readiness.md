@@ -1,6 +1,6 @@
 # Item 10 migration-readiness record
 
-Status: leader analysis and planning complete; Phase A ready but not authorized; physical migration not authorized
+Status: leader analysis/planning and Phase A complete; final physical migration gate not authorized
 
 ## Purpose
 
@@ -40,17 +40,16 @@ Observed gates:
 
 The pre-existing ignored `integrations/pi/dist/` directory was preserved, and the generated `integrations/pi/dist-tests/` directory was removed.
 
-### Current source state before Phase A
+### Accepted Phase A source
 
-- The last fully validated source commit remains `2ae2a72ee375514914c7c5cdbddf311a40fcd363`.
-- Later commits contain the user-owned Pi command-parsing tweak and item 10 planning/documentation; they have not received the complete source gate.
-- The worktree was clean at the focused Phase A readiness check.
-- All coordinated package, lock, marketplace, and plugin metadata remains `0.1.0`.
-- No source tag exists.
-- The exact current tip will be captured after the authorized Phase A change and full gate; planning-only commits are not freeze candidates.
-- The Claude plugin manifest already has the coordinated `0.1.0` version; an earlier planning note incorrectly reported it missing.
+- Exact passing source commit: `318fc77d62269fc1bf7b63370c6a8ed8f2e1aa03` on `master`.
+- Its preceding commit `99eec4e` is the user-authorized pure Prettier remediation for the user-owned Pi command-parsing change; it corrected pre-existing formatting drift without changing behavior.
+- All coordinated package, lock, marketplace, and plugin metadata is `0.2.0`; protocol compatibility values, including `core.version` and `spec/asyncapi.yaml`, remain `0.1.0`.
+- The complete Phase A gate ran against exact source commit `318fc77`; results are recorded below.
+- The worktree was clean after validation. No source tag exists.
+- `integrations/pi/dist/` was regenerated from the accepted source and retained; generated root artifact output and `integrations/pi/dist-tests/` were removed.
 
-Approved direction: leave `0.1.0` as the unreleased historical baseline, bump coordinated source metadata to `0.2.0`, and use the latest accepted `HEAD` as the freeze source after the final gate passes.
+Approved direction: retain `0.1.0` as the unreleased historical baseline and use `318fc77` as the source candidate for the later `pre-split-0.2.0` tag, only after the separate physical go/no-go.
 
 ## Repository inventory
 
@@ -337,9 +336,8 @@ Never run history filtering in the main checkout or the only recovery copy.
 Before repository/ref creation, remote changes, registry contact, history filtering, directory moves, or publication, resolve and record:
 
 - authorization for leader-performed GitHub rename/create operations;
-- authorization for the coordinated `0.2.0` metadata change;
-- maintenance-window timing;
-- exact final passing commit for `pre-split-0.2.0`;
+- maintenance-window timing and stopped repository writers;
+- confirmation of source commit `318fc77d62269fc1bf7b63370c6a8ed8f2e1aa03` and proposed local `pre-split-0.2.0` tag;
 - authorization for physical migration.
 
 ## Approved version direction
@@ -352,7 +350,7 @@ Before repository/ref creation, remote changes, registry contact, history filter
 
 ## Phase A exact change specification
 
-Status: ready for separate source-change authorization; not yet authorized
+Status: completed at `318fc77d62269fc1bf7b63370c6a8ed8f2e1aa03` after separate user authorization
 
 Change only coordinated release metadata:
 
@@ -380,20 +378,25 @@ After the edit:
 9. remove generated build outputs;
 10. commit the passing metadata change as `chore: bump version to 0.2.0`.
 
-No tag, remote, credential, registry, repository, history-filtering, or push action belongs to Phase A.
+No tag, remote, credential, registry, repository, history-filtering, or push action belonged to Phase A.
+
+### Phase A result
+
+- `318fc77` contains the eight approved coordinated metadata files; `99eec4e` separately corrected the pre-existing Pi formatting drift with user authorization.
+- Focused version documentation: 3 passed.
+- Full repository gate against `318fc77`: 510 tests passed; Ruff passed; Black left 76 files unchanged; mypy passed 75 source files.
+- Pi gate against `318fc77`: 72 tests passed; typecheck, build, and Prettier passed.
+- Strict root marketplace and Claude plugin validation passed.
+- Offline Python wheel/sdist artifacts were built as `0.2.0` and passed content validation; Pi dry-run inspection reported `pi-inter-agent@0.2.0` with five expected package files.
+- `git diff --check` passed and generated outputs were cleaned as recorded above.
 
 ## Planned execution runbook
 
-Status: planning only; none of these actions is currently authorized
+Status: Phase A complete; all later phases remain planning-only and unauthorized
 
-### Phase A — resolve and validate the final source
+### Phase A — resolved and validated final source
 
-1. Obtain separate authorization for the coordinated `0.2.0` metadata change.
-2. Make only that approved coordinated version update.
-3. Run the focused version/plugin checks.
-4. Run the complete monorepo, Pi, and Claude gates against the resulting current `HEAD`.
-5. Confirm a clean worktree and record the exact passing commit.
-6. Commit the validated metadata correction before requesting physical migration authorization.
+Completed at `318fc77d62269fc1bf7b63370c6a8ed8f2e1aa03`; see the Phase A result above.
 
 ### Phase B — final physical go/no-go
 
@@ -452,7 +455,6 @@ Using an isolated filtering clone from the verified local mirror:
 
 ## Immediate next steps
 
-1. Obtain explicit user authorization for Phase A.
-2. Only after authorization, apply the exact coordinated `0.2.0` metadata change and run its documented validation.
-3. Record the exact passing Phase A commit and resolve the maintenance-window timing.
-4. Stop at the final physical go/no-go before any tag, credentialed action, remote operation, filtering, or push.
+1. Resolve the maintenance-window timing and stop repository writers.
+2. Present source commit `318fc77`, the proposed local `pre-split-0.2.0` tag, recovery commands, workspace inventory, writer-lock status, and approved GitHub operations for one final physical go/no-go.
+3. Stop before any tag, credentialed action, remote operation, filtering, or push unless that gate is explicitly granted.
