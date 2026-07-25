@@ -41,7 +41,7 @@ Phases A through D are complete. The accepted product source remains annotated t
 
 The user approved clean history for every new repository. Pre-split provenance remains in the archived monorepo and recovery set; private meta, ecosystem, Pi, Claude Code, and core each begin with one curated initial commit on `main`. No `git filter-repo` will be used.
 
-Item 10 remains leader-owned. The next separately gated step is Phase E: assemble a clean private-meta repository from the latest accepted archive snapshot at `/workspace/projects/inter-agent-meta`, without pushing and with the ecosystem submodule deferred until an initial ecosystem `main` commit exists. Executor packets begin with substantive Pi extraction at roadmap item 11, not with item 10 checkpoint work. The user performs every push.
+Item 10 remains leader-owned. The next separately gated step is Phase E: after reading the six preparation-critical files named in the migration record and verifying the final preparation commit is user-pushed, assemble a clean private-meta repository from that immutable archive snapshot at `/workspace/projects/inter-agent-meta`. Phase E uses the exact 69-path manifest, adds curated meta-root guidance, proves a single clean root commit, does not push, and defers the ecosystem submodule until an initial ecosystem `main` commit exists. Executor packets begin with substantive Pi extraction at roadmap item 11, not with item 10 checkpoint work. The user performs every push.
 
 #### Completion standard
 

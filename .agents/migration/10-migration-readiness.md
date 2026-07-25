@@ -438,16 +438,33 @@ Immediately after Phase D, the remote monorepo default branch tip was `c406276�
 
 After a separate final assembly authorization:
 
-1. Use the latest accepted archive `master` commit containing the completed checkpoint record and clean-history decision as the exact snapshot source. Product repositories continue to use frozen product source `pre-split-0.2.0` at `c406276…`.
-2. Initialize a new repository at `/workspace/projects/inter-agent-meta` on `main` with no inherited commits; do not clone or filter monorepo history.
-3. Export only the 69 approved private-meta and deferred-host-planning paths from the source snapshot, then add only intentionally new meta-owned scaffold files.
-4. Reorganize and rewrite the snapshot into a maintainer-only repository with no runtime code, product package artifacts, generated environments, secrets, or copied product histories.
-5. Retain the active plan, role/workflow documents, accepted migration record, and internal roadmap/planning material as current files, not inherited commits.
-6. Defer the `ecosystem/` submodule until the user has pushed an initial ecosystem `main` commit that can be pinned.
-7. Inspect the complete inventory, file modes, symlinks, and secret-risk patterns; run `git diff --check` and `git fsck --full`.
-8. Create one curated initial commit on `main`, verify it is the repository's single root commit, configure the approved private remote locally without pushing, and present it for the user's push.
+#### Immutable preconditions
 
-No `git filter-repo`, remote push, ecosystem initialization, child-repository creation, or product extraction belongs to Phase E.
+1. Use the latest accepted archive `master` commit containing the completed checkpoint record, clean-history decision, and Phase E execution contract as the exact snapshot source. Require a clean archive worktree and verify the user-pushed remote `master` is at that exact commit before target creation. Product repositories continue to use frozen product source `pre-split-0.2.0` at `c406276…`.
+2. Re-verify the freeze tag, recovery bundle digest, restored-mirror integrity, active writer lock, absent target path, private empty meta remote, and public empty ecosystem remote.
+3. Read these preparation-critical files before assembly: `.agents/roles/executor.md`, `docs/ideas/README.md`, `docs/ideas/ideas.sh`, `docs/plans/README.md`, `integrations/codex/README.md`, and `integrations/opencode/README.md`.
+4. Regenerate the exact 69-path source manifest from the immutable commit, create a dry-run archive, and require exact unordered path-set equality. Verify modes, zero unreviewed symlinks, the expected executable set, selected size, and filename-only sensitive-material checks.
+
+#### Clean assembly and curation
+
+5. Initialize `/workspace/projects/inter-agent-meta` independently on `main` with no commits, inherited refs, tags, alternates, worktree link, clone origin, or source `.git` data. The directory must not preexist.
+6. Export only the exact 69 manifest paths with `git archive`. Before any rewrite, require the extracted non-directory file set to equal the manifest exactly.
+7. Add a private-meta `README.md`; rewrite root `AGENTS.md` for coordination-only responsibilities; reconcile `.agents/PLAN.md`, the migration record, and `ROADMAP.md` so Phase F is next. Retain approved role/workflow, roadmap, planning, archive, idea, and deferred-host material as current files rather than inherited commits.
+8. Use the six preparation-file reads to decide narrowly whether their paths/content remain valid. Do not retain duplicate or source-root-specific placeholders merely because they were selected by the broad ownership rule.
+9. Defer the `ecosystem/` submodule until the user has pushed an initial ecosystem `main` commit that can be pinned.
+
+#### Acceptance and failure handling
+
+10. Inspect every target path, file mode, symlink, executable, and private/public classification. Enforce absence of runtime source, product manifests/locks, tests/specs, package artifacts, environments, caches, credentials, key/certificate material, `.gitmodules`, and copied Git histories.
+11. Scan contents for high-confidence credential indicators without printing matched values. Stop before commit on plausible secret material.
+12. Run `git diff --check`, `git fsck --full`, ref/tag/submodule checks, and complete inventory comparisons. Do not run product gates for this coordination-only repository.
+13. Create one curated root commit on `main` (`chore: establish private maintainer repository`). Verify one total commit, one root commit, no parent, no source ancestry, and a clean worktree.
+14. Configure `origin` locally as `git@github.com:arcanemachine/inter-agent-meta.git` without fetch, push, credential inspection, or SSH trust modification. Re-verify by authenticated API that the remote remains private and empty.
+15. Report the immutable source, source/final path counts, initial commit, rewrites/removals, and checks; retain the maintenance lock and stop for the user's push.
+
+If any condition fails before target creation, stop without creating it. After target creation, retain partial state for diagnosis; do not delete, reset, amend, reinitialize, broaden the manifest, or retry destructively without review.
+
+No `git filter-repo`, remote push, ecosystem initialization, child-repository creation, recovery cleanup, or product extraction belongs to Phase E.
 
 ### Phase F — checkpoint verification and closeout
 
