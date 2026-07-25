@@ -30,16 +30,18 @@ The leader completed and durably recorded:
 
 1. the tested source baseline and full monorepo, Pi, and Claude validation results;
 2. current package, repository, branch, and safe remote facts;
-3. the complete path and history-ownership mapping for private meta, core, Pi, Claude Code, and ecosystem material;
-4. the recoverable backup/ref and isolated-filtering strategy;
+3. the complete current-path ownership and target-layout mapping for private meta, core, Pi, Claude Code, and ecosystem material;
+4. the recoverable backup/ref and clean-history repository-assembly strategy;
 5. the accepted recommendations, operating responsibilities, and remaining authorization gates;
 6. the exact Phase A coordinated `0.2.0` metadata-change boundary and validation procedure.
 
 #### Current execution boundary
 
-Phase A is complete at source commit `318fc77d62269fc1bf7b63370c6a8ed8f2e1aa03`: coordinated package/plugin/marketplace/lock/changelog metadata is `0.2.0`, and the documented focused/package/full gates passed. The preceding user-authorized formatting commit `99eec4e` corrected pre-existing Pi Prettier drift; it is part of the accepted source state. Phase A created no tag and performed no migration work.
+Phases A through D are complete. The accepted product source remains annotated tag `pre-split-0.2.0` at `c406276a7a64909f3de926f15d8a876a5ee34419`; the verified bundle and restored mirror remain under the secure transitional migration workspace. The current monorepo is now `arcanemachine/inter-agent-monorepo`; private `arcanemachine/inter-agent-meta` and public `arcanemachine/inter-agent` exist and are empty. The user-pushed archive branch and tag were verified.
 
-Item 10 remains leader-owned. The next step is the separate Phase B final physical go/no-go. Only after later explicit physical authorization does the leader perform its recovery, GitHub-topology, and private-meta checkpoint work directly. Executor packets begin with substantive extraction work at roadmap item 11, not with item 10 decision or checkpoint work. The user performs every push.
+The user approved clean history for every new repository. Pre-split provenance remains in the archived monorepo and recovery set; private meta, ecosystem, Pi, Claude Code, and core each begin with one curated initial commit on `main`. No `git filter-repo` will be used.
+
+Item 10 remains leader-owned. The next separately gated step is Phase E: assemble a clean private-meta repository from the latest accepted archive snapshot at `/workspace/projects/inter-agent-meta`, without pushing and with the ecosystem submodule deferred until an initial ecosystem `main` commit exists. Executor packets begin with substantive Pi extraction at roadmap item 11, not with item 10 checkpoint work. The user performs every push.
 
 #### Completion standard
 
@@ -47,7 +49,7 @@ The leader verifies the tested freeze state, recovery path, approved repository 
 
 #### Current authorization boundary
 
-Local leader analysis, non-secret durable planning documentation, and Phase A are complete. No executor dispatch, repository or ref creation, credential use, registry contact, remote change, history rewrite, file move, publication, or extraction is currently authorized. Phase B requires a separate final physical go/no-go.
+Local leader analysis, non-secret durable planning documentation, source freeze/recovery, and approved GitHub topology operations are complete. No executor dispatch, new local clean-repository assembly, credential use, registry contact, remote change, push, publication, or product extraction is currently authorized. Phase E requires a separate final clean-assembly go/no-go.
 
 Detailed accepted requirements remain in [`../docs/plans/important-closeout/04-migration-checkpoint-and-meta.md`](../docs/plans/important-closeout/04-migration-checkpoint-and-meta.md). Continuity is tracked in [`../ROADMAP.md`](../ROADMAP.md#closeout-execution-queue).
 

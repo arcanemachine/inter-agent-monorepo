@@ -6,7 +6,7 @@ Status: leader analysis/planning and Phase A complete; final physical migration 
 
 Record the verified source baseline, current repository/package facts, complete ownership mapping, recommended recovery procedure, and decisions required before physical repository migration.
 
-This record contains no credentials or authenticated registry/hosting results. It does not authorize repository or ref creation, remote changes, history filtering, file moves, publication, or extraction.
+This record contains no credentials or authenticated registry/hosting results. It does not authorize repository or ref creation, remote changes, clean-repository assembly, file moves, publication, or extraction.
 
 ## Intended topology
 
@@ -54,13 +54,13 @@ Approved direction: retain `0.1.0` as the unreleased historical baseline. The la
 ## Repository inventory
 
 - Current remote names: `origin` only.
-- Sanitized fetch/push destination: SSH transport to `github.com/arcanemachine/inter-agent.git`.
+- Sanitized fetch/push destination: SSH transport to `github.com/arcanemachine/inter-agent-monorepo.git`.
 - Upstream: `master` tracks `origin/master`.
 - The local `origin/HEAD` symbolic default-branch ref is unresolved.
-- Local branches: `master`, `master--backup`, and `unstable`; re-inventory all refs at the final physical gate.
-- Local tags: none.
+- Local branches: `master`, `master--backup`, and `unstable`; all are preserved in the verified recovery set.
+- Local annotated tag: `pre-split-0.2.0` at frozen product source `c406276…`; the user-pushed remote tag was verified.
 - Submodules and `.gitmodules`: none.
-- `git-filter-repo`: available locally.
+- `git-filter-repo`: available locally but intentionally unused; every new repository will have clean history.
 
 ### Recovery-only local branches
 
@@ -101,7 +101,7 @@ All 235 tracked paths are classified. Counts describe their primary current-sour
 
 ### Private meta
 
-Move with relevant path history:
+Include from the approved current snapshot:
 
 - `.agents/**`;
 - root `AGENTS.md`;
@@ -114,7 +114,7 @@ Public repositories receive curated public contribution material rather than cop
 
 ### Core
 
-Move with path history:
+Include from the approved current snapshot:
 
 - `src/inter_agent/core/**`;
 - `src/inter_agent/__init__.py`;
@@ -157,7 +157,7 @@ Rationale: Pi and Claude use identical local control semantics and security cons
 
 ### Pi
 
-Move and rename with path history:
+Include and rename from the approved current snapshot:
 
 ```text
 integrations/pi/src/index.ts
@@ -193,7 +193,7 @@ Retire the monorepo root Pi facade rather than mapping two package manifests to 
 
 ### Claude Code
 
-Move and rename with path history:
+Include and rename from the approved current snapshot:
 
 ```text
 integrations/claude-code/.claude-plugin/plugin.json
@@ -230,7 +230,7 @@ Preserve and rewrite as installed/candidate cross-repository acceptance:
 
 Create clean ecosystem-level README, architecture overview, `COMPATIBILITY.md`, license, submodule layout, and thin orchestration. Do not copy runtime source.
 
-Recommendation: create the ecosystem repository with clean collector history rather than converting monorepo history into collector history. Preserve the source monorepo separately and retain relevant history in the filtered children.
+Approved direction: create the ecosystem, private meta, and every product child with clean history. Preserve all pre-split provenance only in the archived monorepo, freeze tag, verified bundle, and mirror.
 
 ### Shared and derived public material
 
@@ -241,7 +241,7 @@ Recommendation: create the ecosystem repository with clean collector history rat
 - `LICENSE.md`: copy to every public repository.
 - `.gitignore` and `.tool-versions`: rebuild per repository rather than copying monorepo assumptions.
 
-Shared documentation may appear in more than one filtered history only when it is intentionally rewritten into package-owned public documentation.
+Shared documentation may be copied into more than one clean repository only when it is intentionally rewritten into package-owned public documentation.
 
 ### Retire or rebuild
 
@@ -255,13 +255,13 @@ Do not migrate directly as runtime files:
 
 Any useful ecosystem orchestration or public contributor guidance is written afresh for the target boundary.
 
-## Recovery and isolated-filtering strategy
+## Recovery and clean-repository assembly strategy
 
 ### Terminology
 
-An **isolated filtering clone** is a temporary local clone used only for `git filter-repo` and mapping experiments. It can be regenerated from the verified source backup; its results still require full review.
+A **clean repository** is initialized independently on `main`, receives only the reviewed current-file snapshot and target-layout rewrites, and begins with one curated initial commit. It inherits no monorepo commits.
 
-Accepted extracted repositories are retained. Filtering clones and recovery material are not deleted until the user confirms the migration is complete and recoverable.
+Accepted clean repositories are retained. Staging material and recovery artifacts are not deleted until the user confirms the migration is complete and recoverable.
 
 ### Preconditions
 
@@ -284,30 +284,22 @@ After the final physical go/no-go, use a temporary namespaced migration workspac
 
 The bundle is the portable immutable recovery artifact during migration. The mirror is the convenient source for repeatable local clones. Neither is intended to remain permanently under `/workspace/tmp/`; retain them until the archived monorepo and accepted target repositories provide verified durable recovery, then remove them only with user confirmation.
 
-### Filtering workspace
+### Clean-repository workspace
 
-Create separate local clones from the verified mirror for:
+Create each permanent new checkout outside `/workspace/tmp/inter-agent-migration/` only when its roadmap item is active. Use the verified mirror and archive only to validate the approved source snapshot; do not clone or filter their Git history into a new repository.
 
-- private meta history;
-- core history;
-- Pi history;
-- Claude Code history.
+For every new repository:
 
-Create the public ecosystem as a clean collector repository after child histories are accepted.
+1. select the exact approved source commit and complete path manifest;
+2. initialize a new repository with branch `main` and no inherited commits;
+3. export only the approved current paths without any source `.git` data;
+4. apply the reviewed path renames and target-specific rewrites;
+5. inspect every resulting path, file mode, symlink, license, and private/public boundary;
+6. run `git diff --check`, `git fsck --full`, and the package-specific gate when applicable;
+7. verify there is exactly one root commit before the user's initial push; and
+8. retain the clean checkout until leader acceptance and remote verification.
 
-For every filtered child:
-
-1. start from the accepted freeze branch/ref rather than every source branch;
-2. apply only the reviewed path and rename manifest;
-3. run `git fsck --full`;
-4. compare commit counts and representative history;
-5. verify author identity and timestamps on representative files;
-6. verify licenses and executable bits;
-7. inspect the entire resulting file inventory for private or unrelated content;
-8. run the child package gate before any push;
-9. retain the clone until leader acceptance and remote verification.
-
-Never run history filtering in the main checkout or the only recovery copy.
+Never rewrite the main checkout, mirror, or sole recovery copy. Never use `git filter-repo` for this split.
 
 ## Recommended decisions
 
@@ -329,13 +321,14 @@ Never run history filtering in the main checkout or the only recovery copy.
 | D14 | Monorepo archive name | Rename the current repository to `arcanemachine/inter-agent-monorepo` before creating the clean ecosystem repository at `arcanemachine/inter-agent` | Approved |
 | D15 | GitHub operation responsibility | Leader may use an existing authenticated `gh` session for approved rename/create operations; user performs every push | Approved and executed for rename/create |
 | D16 | Branch protection | No agent action; user manages hosting policy | Approved and user-owned |
-| D17 | Migration workspace | Use `/workspace/tmp/inter-agent-migration/` only for transitional bundles, mirrors, filtering clones, and build artifacts; nothing there is a permanent deliverable | Approved |
+| D17 | Migration workspace | Use `/workspace/tmp/inter-agent-migration/` only for transitional bundles, mirrors, staging checks, and build artifacts; permanent clean checkouts live under `/workspace/projects`; nothing under the migration workspace is a permanent deliverable | Approved |
 | D18 | Maintenance workflow | Stop repository writers, run the final gates, and create verified recovery artifacts before migration edits | Approved and active |
-| D19 | Final physical gate | Require a separate final go/no-go before tag creation, GitHub operations, filtering, or pushing | Approved and passed for Phase C/D |
+| D19 | Final physical gate | Require a separate final go/no-go before tag creation, GitHub operations, clean-repository assembly, or pushing | Approved and passed for Phase C/D |
+| D20 | New-repository history | Give private meta, ecosystem, Pi, Claude Code, and core clean history with one curated initial commit; retain pre-split history only in the archived monorepo and recovery set | Approved |
 
 ## Mandatory user gate
 
-Before repository/ref creation, remote changes, registry contact, history filtering, directory moves, or publication, resolve and record:
+Before repository/ref creation, remote changes, registry contact, clean-repository assembly, directory moves, or publication, resolve and record:
 
 - authorization for leader-performed GitHub rename/create operations;
 - maintenance-window timing and stopped repository writers;
@@ -380,7 +373,7 @@ After the edit:
 9. remove generated build outputs;
 10. commit the passing metadata change as `chore: bump version to 0.2.0`.
 
-No tag, remote, credential, registry, repository, history-filtering, or push action belonged to Phase A.
+No tag, remote, credential, registry, repository assembly, or push action belonged to Phase A.
 
 ### Phase A result
 
@@ -425,7 +418,7 @@ Executed under `set -euo pipefail`, `umask 077`:
 9. Confirmed `master`, `master--backup`, `unstable`, and `pre-split-0.2.0` all match the source object IDs across source, bundle, and mirror.
 10. Created a mode-`0600` recovery manifest at `/workspace/tmp/inter-agent-migration/recovery-manifest.md`.
 
-The seven dangling autostash commits and three dangling blobs were intentionally excluded from the all-refs bundle by decision; the restored mirror contains none. No child filtering clone was created.
+The seven dangling autostash commits and three dangling blobs were intentionally excluded from the all-refs bundle by decision; the restored mirror contains none. No child repository was assembled.
 
 The bundle and mirror remain transitional recovery material through the extraction program. They are removed only after verified durable repositories exist and the user explicitly confirms cleanup.
 
@@ -439,25 +432,29 @@ After user-provided `gh` authentication (session reported login `arcanemachine`)
 4. Created public `arcanemachine/inter-agent` as the clean ecosystem placeholder; verified `PUBLIC`, empty, no default branch.
 5. Confirmed no child repositories (`inter-agent-core`, `inter-agent-pi`, `inter-agent-claude-code`) were created.
 
-Observed remote monorepo default branch tip at `c406276…`, matching the freeze candidate, with no tags on the remote (`pre-split-0.2.0` remains local-only). The leader ran no `git push`; the remote tip is consistent with a user-owned push of `master`. The new meta and ecosystem repositories are empty, confirming no push to them. The leader did not mark the monorepo archived, configure branch protection, contact registries, filter history, or move files.
+Immediately after Phase D, the remote monorepo default branch tip was `c406276…` and the freeze tag was local-only. The user subsequently pushed archive `master` result commit `8be383d…` and annotated tag `pre-split-0.2.0`; authenticated API verification confirmed the remote branch, tag object, and peeled candidate exactly. The new meta and ecosystem repositories remain empty. The leader did not run `git push`, mark the monorepo archived, configure branch protection, contact registries, assemble child repositories, or move product files.
 
 ### Phase E — private meta scaffold
 
-Using an isolated filtering clone from the verified local mirror:
+After a separate final assembly authorization:
 
-1. Filter only the approved meta-owned paths from the accepted freeze branch.
-2. Reorganize them into a maintainer-only repository with no runtime code, package artifacts, generated environments, secrets, or copied child histories.
-3. Retain the active plan, role/workflow documents, accepted migration record, and internal planning history.
-4. Add the clean public ecosystem repository at `ecosystem/` only after the user has pushed an initial ecosystem commit that can be pinned as a submodule.
-5. Run `git fsck --full`, inspect the complete file inventory, and run `git diff --check`.
-6. Prepare the local meta branch for the user's push; the leader does not push it.
+1. Use the latest accepted archive `master` commit containing the completed checkpoint record and clean-history decision as the exact snapshot source. Product repositories continue to use frozen product source `pre-split-0.2.0` at `c406276…`.
+2. Initialize a new repository at `/workspace/projects/inter-agent-meta` on `main` with no inherited commits; do not clone or filter monorepo history.
+3. Export only the 69 approved private-meta and deferred-host-planning paths from the source snapshot, then add only intentionally new meta-owned scaffold files.
+4. Reorganize and rewrite the snapshot into a maintainer-only repository with no runtime code, product package artifacts, generated environments, secrets, or copied product histories.
+5. Retain the active plan, role/workflow documents, accepted migration record, and internal roadmap/planning material as current files, not inherited commits.
+6. Defer the `ecosystem/` submodule until the user has pushed an initial ecosystem `main` commit that can be pinned.
+7. Inspect the complete inventory, file modes, symlinks, and secret-risk patterns; run `git diff --check` and `git fsck --full`.
+8. Create one curated initial commit on `main`, verify it is the repository's single root commit, configure the approved private remote locally without pushing, and present it for the user's push.
+
+No `git filter-repo`, remote push, ecosystem initialization, child-repository creation, or product extraction belongs to Phase E.
 
 ### Phase F — checkpoint verification and closeout
 
 1. Verify the archived monorepo remains complete and recoverable.
 2. Verify private meta and public ecosystem visibility and canonical URLs.
 3. Verify the meta repository contains no runtime source or secret material.
-4. Verify the ecosystem placeholder contains no monorepo/private history.
+4. Verify the ecosystem placeholder remains empty or contains only its later clean initial history, with no monorepo/private history.
 5. Verify the reviewed path manifest remains usable for Pi, Claude, and core extraction.
 6. Record user-performed pushes and observed remote results.
 7. Close item 10 only when Pi extraction can begin without unresolved ownership, naming, recovery, or authorization questions.
@@ -466,6 +463,6 @@ Using an isolated filtering clone from the verified local mirror:
 ## Immediate next steps
 
 1. The maintenance window remains active; the leader has not released it.
-2. Phase E (private meta scaffold via an isolated filtering clone from the verified mirror) and Phase F (checkpoint verification and closeout) remain separately gated. Do not begin filtering or populate the new repositories without explicit authorization.
-3. The user owns every push, including the source tag `pre-split-0.2.0` and the initial `main` commits for the meta and ecosystem repositories.
-4. Stop before any credentialed action, remote push, filtering, extraction, or registry contact unless that gate is explicitly granted.
+2. Phase E (clean private-meta scaffold) and Phase F (checkpoint verification and closeout) remain separately gated. Do not create the local meta repository or populate new repositories without explicit authorization.
+3. The user owns every push, including initial `main` commits for meta and ecosystem; the archive result commit and source tag are already user-pushed and verified.
+4. Stop before any credentialed action, remote push, clean-repository assembly, extraction, or registry contact unless that gate is explicitly granted.

@@ -34,9 +34,9 @@ Never request, display, copy, or commit credentials. If repository creation requ
 2. Run the monorepo full gate plus Pi and Claude package validation.
 3. Record the accepted source tag/version and clean commit in private migration notes, not public README instructions.
 4. Confirm no attached/running agents are editing the repository.
-5. Create a recoverable backup/ref before history filtering.
-6. Perform filtering in separate temporary clones under a namespaced workspace temp directory, never destructively in the only checkout.
-7. Verify commit counts, tags, licenses, authorship, and representative history before pushing.
+5. Create a recoverable backup/ref before assembling any new repository.
+6. Assemble every target in a separate newly initialized checkout; never rewrite or repurpose the source checkout.
+7. Verify complete inventories, file modes, licenses, clean root commits, and the private/public boundary before pushing.
 
 Git submodules necessarily store commit IDs as gitlinks. Do not copy those hashes into README install instructions.
 
@@ -54,15 +54,22 @@ Do not put runtime code, package artifacts, secrets, registry tokens, generated 
 
 Public repositories own stable product README/architecture/security/changelog/license material. If generic public contributor instructions are useful, use an intentionally public `CONTRIBUTING.md`; do not copy private agent workflow by default.
 
-## History extraction strategy
+## Clean-history repository strategy
 
-Prefer path-filtered history preservation with `git filter-repo` (or an equivalently reviewed tool), performed in isolated temporary filtering clones:
+Start private meta, ecosystem, Pi, Claude Code, and core as independent repositories with clean history. The archived monorepo, freeze tag, verified bundle, and mirror retain the complete pre-split provenance; new repositories do not inherit monorepo commits.
 
-- Pi extraction includes `integrations/pi/**`, `src/inter_agent/adapters/pi/**`, Pi tests, Pi docs, and shared files intentionally copied/rebuilt at the child root.
-- Claude extraction includes `integrations/claude-code/**`, `src/inter_agent/adapters/claude/**`, Claude tests, and intentional shared docs/license.
-- Core extraction includes `src/inter_agent/core/**`, protocol/spec, core/conformance tests, generic scripts/docs/package metadata, and excludes host adapters/assets.
+For every new repository:
 
-Because files come from multiple current paths, define and review an explicit mapping manifest before running history filters. Do not improvise path renames in the destructive step.
+1. select the exact approved source commit and path manifest;
+2. export only the approved current files into a new checkout with no inherited `.git` directory;
+3. apply the reviewed path renames and intentionally rewrite shared material for the target boundary;
+4. inspect the complete resulting inventory, permissions, and private/public boundary;
+5. run the repository's applicable checks; and
+6. create one curated initial commit on `main` for the user's push.
+
+Pi receives `integrations/pi/**`, `src/inter_agent/adapters/pi/**`, Pi tests, Pi docs, and shared files intentionally copied or rebuilt at the child root. Claude receives its integration assets, adapter/helper source, tests, and intentional shared docs/license. Core receives protocol/runtime source, core/conformance tests, generic scripts/docs/package metadata, and excludes host adapters/assets.
+
+Because files come from multiple current paths, retain and review the explicit mapping manifest before copying or renaming anything. Never improvise the target inventory, and never use `git filter-repo` for this split.
 
 ## Transition policy
 
@@ -78,10 +85,10 @@ Because files come from multiple current paths, define and review an explicit ma
 - Private meta exists with correct visibility and public ecosystem placeholder/submodule strategy.
 - A clean, tested freeze commit/ref exists.
 - A reviewed path ownership/mapping manifest exists for all children.
-- Migration occurs in recoverable clones.
+- Clean repositories are assembled separately while the verified monorepo recovery set remains intact.
 - No public artifact contains private workflow material.
 - The next active item can extract Pi without unresolved ownership or naming decisions.
 
 ## Checks
 
-Planning-only checkpoint changes require `git diff --check`. Any scripts added for mapping/filter verification require focused tests and the applicable repository gate. Remote visibility and submodule URL verification must be observed from Git, not assumed from documentation.
+Planning-only checkpoint changes require `git diff --check`. Any scripts added for mapping/copy verification require focused tests and the applicable repository gate. Remote visibility and submodule URL verification must be observed from Git, not assumed from documentation.

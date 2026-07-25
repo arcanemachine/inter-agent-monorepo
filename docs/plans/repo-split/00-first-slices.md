@@ -74,11 +74,12 @@ After that gate, Pi is the first product extraction because its TypeScript packa
 
 ## History and safety
 
-- Perform path filtering in isolated temporary clones using a reviewed mapping manifest.
-- Preserve relevant history for files moving into each child.
-- Keep a recoverable freeze ref/backup.
+- Give every new repository clean history beginning with one curated initial commit on `main`.
+- Use the reviewed mapping manifest to export only the approved current files; do not use `git filter-repo`.
+- Preserve all pre-split history in the archived monorepo, freeze tag, verified bundle, and mirror.
+- Keep the recoverable source set intact until all new repositories are accepted.
 - Stop all editing agents during physical migration.
-- Never rewrite the only working checkout.
+- Assemble new repositories separately; never rewrite the source checkout.
 - Do not create/push remotes or change visibility without explicit authorization.
 - Never expose credentials.
 
