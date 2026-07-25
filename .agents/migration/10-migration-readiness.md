@@ -324,14 +324,14 @@ Never run history filtering in the main checkout or the only recovery copy.
 | D9 | Freeze source | Latest accepted `HEAD` after the final full gate | Approved |
 | D10 | Freeze ref and version | Use coordinated source version `0.2.0` and annotated freeze tag `pre-split-0.2.0` | Approved |
 | D11 | Registry names and checks | Use locked names; user controls suitable PyPI/npm accounts and will handle availability/publication later; no agent registry contact | Approved and deferred |
-| D12 | Physical migration | Begin only after all preceding gates and maintenance-window confirmation | Not authorized |
+| D12 | Physical migration | Begin only after all preceding gates and maintenance-window confirmation | Phase C/D executed; Phase E/F remain gated |
 | D13 | GitHub owner and target repositories | Use `arcanemachine/inter-agent-meta`, `arcanemachine/inter-agent`, `arcanemachine/inter-agent-core`, `arcanemachine/inter-agent-pi`, and `arcanemachine/inter-agent-claude-code` | Approved |
 | D14 | Monorepo archive name | Rename the current repository to `arcanemachine/inter-agent-monorepo` before creating the clean ecosystem repository at `arcanemachine/inter-agent` | Approved |
-| D15 | GitHub operation responsibility | Leader may use an existing authenticated `gh` session for approved rename/create operations; user performs every push | Approved, later authorization still required |
+| D15 | GitHub operation responsibility | Leader may use an existing authenticated `gh` session for approved rename/create operations; user performs every push | Approved and executed for rename/create |
 | D16 | Branch protection | No agent action; user manages hosting policy | Approved and user-owned |
 | D17 | Migration workspace | Use `/workspace/tmp/inter-agent-migration/` only for transitional bundles, mirrors, filtering clones, and build artifacts; nothing there is a permanent deliverable | Approved |
-| D18 | Maintenance workflow | Stop repository writers, run the final gates, and create verified recovery artifacts before migration edits | Approved; exact window pending |
-| D19 | Final physical gate | Require a separate final go/no-go before tag creation, GitHub operations, filtering, or pushing | Approved |
+| D18 | Maintenance workflow | Stop repository writers, run the final gates, and create verified recovery artifacts before migration edits | Approved and active |
+| D19 | Final physical gate | Require a separate final go/no-go before tag creation, GitHub operations, filtering, or pushing | Approved and passed for Phase C/D |
 
 ## Mandatory user gate
 
@@ -394,7 +394,7 @@ No tag, remote, credential, registry, repository, history-filtering, or push act
 
 ## Planned execution runbook
 
-Status: Phase A complete; all later phases remain planning-only and unauthorized
+Status: Phase A, B, C, and D complete; Phase E and F remain planning-only and unauthorized
 
 ### Phase A — resolved and validated final source
 
@@ -406,32 +406,40 @@ Present the exact passing commit, proposed tags, GitHub operations, local recove
 
 No earlier planning approval substitutes for this gate.
 
-### Phase C — source freeze and temporary recovery set
+Result: obtained. Accepted candidate `c406276a7a64909f3de926f15d8a876a5ee34419` on clean `master`; proposed local annotated tag `pre-split-0.2.0`; recovery commands, workspace inventory, writer-lock status, and reviewed GitHub operations were approved and authorized.
 
-After the go/no-go:
+### Phase C — source freeze and temporary recovery set — COMPLETED
 
-1. Reconfirm that the maintenance window remains active and no executor or other session has written since the accepted current `master` commit.
-2. Create the approved local annotated source tag without pushing it.
-3. Create and verify an all-refs bundle under `/workspace/tmp/inter-agent-migration/`.
-4. Record its SHA-256 digest in this maintainer migration record.
-5. Create a local mirror from the checkout without contacting the remote.
-6. Run `git fsck --full` and verify the mirror contains `master`, `master--backup`, `unstable`, and the approved freeze tag.
-7. Create no child filtering clone until its roadmap item becomes active.
+Pre-flight revalidated the candidate, clean worktree, single worktree, no Git lock files, absent recovery workspace, expected `origin`, contained `master--backup`, recovery-only `unstable`, 235-path manifest total, and `git fsck --full` exiting successfully with seven dangling autostash commits and three dangling blobs present (intentionally excluded). No executor notices were sent; the user confirmed no other agents were working.
+
+Executed under `set -euo pipefail`, `umask 077`:
+
+1. Created `/workspace/tmp/inter-agent-migration/` with mode `0700`.
+2. Created annotated local tag `pre-split-0.2.0` at `c406276…` (tag object `49934bb1b9041ddbc78b35d7ec6f698576ca90b4`, confirmed peeling to the candidate).
+3. Snapshotted all refs to `source-refs.txt`.
+4. Created `inter-agent-pre-split-0.2.0.bundle` with `git bundle create --version=2 --all`.
+5. `git bundle verify` reported the bundle okay with a complete history and all six source refs plus `HEAD`.
+6. Recorded SHA-256 `0b9d063d0fc9a5712be7bbddd73ae2be82177e507e49f41aaa5f933ab06ea17d` and verified it.
+7. Restored `inter-agent-monorepo.git` as a mirror cloned from the bundle (proving the portable bundle reconstructs a mirror).
+8. `git -C …monorepo.git fsck --full` passed with zero dangling/unreachable objects.
+9. Confirmed `master`, `master--backup`, `unstable`, and `pre-split-0.2.0` all match the source object IDs across source, bundle, and mirror.
+10. Created a mode-`0600` recovery manifest at `/workspace/tmp/inter-agent-migration/recovery-manifest.md`.
+
+The seven dangling autostash commits and three dangling blobs were intentionally excluded from the all-refs bundle by decision; the restored mirror contains none. No child filtering clone was created.
 
 The bundle and mirror remain transitional recovery material through the extraction program. They are removed only after verified durable repositories exist and the user explicitly confirms cleanup.
 
-### Phase D — approved GitHub topology transition
+### Phase D — approved GitHub topology transition — COMPLETED
 
-After separate credential-use authorization:
+After user-provided `gh` authentication (session reported login `arcanemachine`), credentialed prechecks confirmed `arcanemachine/inter-agent` existed and was public, and that `arcanemachine/inter-agent-monorepo` and `arcanemachine/inter-agent-meta` were available. Then, in order:
 
-1. Use the existing authenticated `gh` session without displaying credential details.
-2. Rename `arcanemachine/inter-agent` to `arcanemachine/inter-agent-monorepo`.
-3. Create private `arcanemachine/inter-agent-meta` without pushing source.
-4. Create public `arcanemachine/inter-agent` as the clean ecosystem placeholder without importing monorepo history.
-5. Do not create child repositories early; each child repository is created with its extraction item.
-6. Update the source checkout's `origin` to the approved archive URL only after the rename is verified.
-7. The user performs every push, including the source tag and initial meta/ecosystem branches.
-8. The leader verifies repository names and visibility without exposing credentials.
+1. Renamed `arcanemachine/inter-agent` to `arcanemachine/inter-agent-monorepo` via `gh repo rename`; verified name, preserved `PUBLIC` visibility, non-empty history, and default branch `master`.
+2. Repointed this checkout's `origin` to `git@github.com:arcanemachine/inter-agent-monorepo.git` before recreating the old name; verified locally and confirmed HEAD/tag unmoved.
+3. Created private `arcanemachine/inter-agent-meta`; verified `PRIVATE`, empty, no default branch.
+4. Created public `arcanemachine/inter-agent` as the clean ecosystem placeholder; verified `PUBLIC`, empty, no default branch.
+5. Confirmed no child repositories (`inter-agent-core`, `inter-agent-pi`, `inter-agent-claude-code`) were created.
+
+Observed remote monorepo default branch tip at `c406276…`, matching the freeze candidate, with no tags on the remote (`pre-split-0.2.0` remains local-only). The leader ran no `git push`; the remote tip is consistent with a user-owned push of `master`. The new meta and ecosystem repositories are empty, confirming no push to them. The leader did not mark the monorepo archived, configure branch protection, contact registries, filter history, or move files.
 
 ### Phase E — private meta scaffold
 
@@ -457,6 +465,7 @@ Using an isolated filtering clone from the verified local mirror:
 
 ## Immediate next steps
 
-1. Resolve the maintenance-window timing and stop repository writers.
-2. Present the exact accepted current `master` commit containing Phase A source commit `318fc77` and this durable closeout, the proposed local `pre-split-0.2.0` tag, recovery commands, workspace inventory, writer-lock status, and approved GitHub operations for one final physical go/no-go.
-3. Stop before any tag, credentialed action, remote operation, filtering, or push unless that gate is explicitly granted.
+1. The maintenance window remains active; the leader has not released it.
+2. Phase E (private meta scaffold via an isolated filtering clone from the verified mirror) and Phase F (checkpoint verification and closeout) remain separately gated. Do not begin filtering or populate the new repositories without explicit authorization.
+3. The user owns every push, including the source tag `pre-split-0.2.0` and the initial `main` commits for the meta and ecosystem repositories.
+4. Stop before any credentialed action, remote push, filtering, extraction, or registry contact unless that gate is explicitly granted.
