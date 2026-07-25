@@ -445,6 +445,15 @@ After a separate final assembly authorization:
 3. Read these preparation-critical files before assembly: `.agents/roles/executor.md`, `docs/ideas/README.md`, `docs/ideas/ideas.sh`, `docs/plans/README.md`, `integrations/codex/README.md`, and `integrations/opencode/README.md`.
 4. Regenerate the exact 69-path source manifest from the immutable commit, create a dry-run archive, and require exact unordered path-set equality. Verify modes, zero unreviewed symlinks, the expected executable set, selected size, and filename-only sensitive-material checks.
 
+Preparation-read decisions are resolved:
+
+- retain `.agents/roles/executor.md`; meta root guidance will define child-checkout packet boundaries;
+- retain executable `docs/ideas/ideas.sh`, whose root calculation remains valid, and correct `docs/ideas/README.md` references from nonexistent `docs/ROADMAP.md` to root `ROADMAP.md`;
+- update the stale completed-work queue in `docs/plans/README.md` to Phase F and item 11 sequencing;
+- retain `integrations/codex/README.md` and `integrations/opencode/README.md` as substantive deferred-host design references rather than runtime source, while correcting stale Codex sequencing and any wording that falsely implies private meta stores product source;
+- narrowly adapt `.agents/roles/leader.md` so product gates run in the applicable child checkout rather than expecting a meta-root `./run-checks.sh`;
+- expect 70 final tracked paths: 69 exact exports plus one new private-meta root `README.md`.
+
 #### Clean assembly and curation
 
 5. Initialize `/workspace/projects/inter-agent-meta` independently on `main` with no commits, inherited refs, tags, alternates, worktree link, clone origin, or source `.git` data. The directory must not preexist.
